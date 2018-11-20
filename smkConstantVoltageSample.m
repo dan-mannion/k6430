@@ -1,0 +1,33 @@
+function output = smkConstantVoltageSample(voltage, t_end, ICC)
+%SMKCONSTANTVOLTAGESAMPLE (voltage, t_end, ICC) Runs constant voltage sample
+%and returns the output data packaged in a struct with voltage, current and
+%time properties. 
+    k = smkConnect();
+    %Configure voltage source 
+    smkConfigSource(k);
+    fprintf(k, ':SOURCE1:VOLTAGE:MODE FIXED');
+    fprintf(k, ':SOURCE1:VOLTAGE:LEVEL %E', voltage);
+    fprintf(k, ':SOURCE1:CLEAR:AUTO OFF');
+    %Configure sense 
+    if(~exist('ICC', 'var'))
+       ICC = 100e-3; 
+    end
+    smkConfigSense(k, ICC);
+    
+    %Init data variable
+    data = zeros(1,5);
+    %Turn output on 
+    %Reset timer
+    fprintf(k, ':SYSTEM:TIME:RESET');
+    fprintf(k, ':OUTPUT1:STATE ON');
+    while(data(end,4)<t_end)
+    fprintf(k,':READ?');
+    data = [data; smkDataParse(fscanf(k))];
+    end
+    fprintf(k, ':OUTPUT1:STATE OFF');
+    
+    %Package data into struct
+    output.voltage = data(:,1);
+    output.current = data(:,2);
+    output.time = data(:,4);
+end
