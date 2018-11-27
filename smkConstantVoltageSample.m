@@ -20,11 +20,12 @@ function output = smkConstantVoltageSample(voltage, t_end, ICC)
     %Reset timer
     fprintf(k, ':SYSTEM:TIME:RESET');
     fprintf(k, ':OUTPUT1:STATE ON');
-    while(data(end,4)<t_end)
+    while(data(end,4)<=t_end)
     fprintf(k,':READ?');
     data = [data; smkDataParse(fscanf(k))];
     end
     fprintf(k, ':OUTPUT1:STATE OFF');
+
     
     %Package data into struct
     output.voltage = data(:,1);
