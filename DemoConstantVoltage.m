@@ -1,6 +1,9 @@
-output = smkConstantVoltageSample(0.5, 10);
+output = smkConstantVoltageSample(-0.7, 5);
 
-f1 = figure(1);
-plot(output.time, output.current);
+f1 = figure(1);hold off;
+plot(output.time, output.current,'-x');
 
-theme(f1);
+figure(2);hold off;
+semilogy(output.time, output.current);
+
+% theme(f1);
