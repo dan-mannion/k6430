@@ -1,4 +1,7 @@
-function data = smkListSweep(k, v, icc)
+function output = smkListSweep(k, v, t_int, icc, repeat_N)
+if(~exist('repeat_N','var'))
+repeat_N=1;
+end
 smkDispTop(k,'List Sweep');
 smkDispBottom(k,sprintf('ICC: %3.2E A',icc));
 
@@ -28,21 +31,28 @@ list_str = sprintf('%3.3f, ',v);
 %Remove last comma and space
 list_str = list_str(1:length(list_str)-2);
 fprintf(k, ':SOURCE1:LIST:VOLTAGE %s',list_str);
+%Set interval to be t_int;
+fprintf(k, ':SOUR:DEL %f',t_int);
+
+% fprintf(k, ':INIT');
+% % fprintf(k, ':OUTPUT1:STATE ON');
+% fprintf(k, ':READ?');
+
+data = [];
+for n = 1:repeat_N
+buff=[];
+check = [];
 % Turn on output
 fprintf(k, ':TRIG:COUNT %i', length(v));
 disp('Start sweep');
 smkDispTop(k,'Starting sweep');
-% fprintf(k, ':INIT');
-% % fprintf(k, ':OUTPUT1:STATE ON');
-% fprintf(k, ':READ?');
+o=query(k,'*OPC?');
 disp('Start sweep');
 fprintf(k, ':INIT');
 o=query(k,'*OPC?');
 disp('Sweep complete, get data');
 fprintf(k, ':FETCH?;*OPC?');
-buff=[];
-data = [];
-check = [];
+
 while(~strcmp(check,char([49 10])))
    buff=fscanf(k);
    check=buff(length(buff)-1:length(buff)); 
@@ -51,5 +61,10 @@ while(~strcmp(check,char([49 10])))
    end
    data= [data, buff]; 
 end
+data=[data,','];
+end
 data = smkDataParse(data);
+    output.voltage = data(:,1);
+    output.current = data(:,2);
+    output.time = data(:,4);
 end
