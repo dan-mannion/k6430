@@ -1,4 +1,4 @@
-output = smkConstantVoltageSample(-0.7, 5);
+output = smkConstantVoltageSample(-0.7, 400);
 
 f1 = figure(1);hold off;
 plot(output.time, output.current,'-x');
