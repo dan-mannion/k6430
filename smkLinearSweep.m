@@ -19,7 +19,7 @@ fprintf(k, ':SOURCE1:VOLTAGE:STEP %f', vinc);
 fprintf(k, ':SOURCE1:SWEEP:DIRECTION UP');
 
 % Turn on output
-fprintf(k, ':TRIG:COUNT %i', floor((vstop-vstart)/vinc)+1);
+fprintf(k, ':TRIG:COUNT %i', floor(abs((vstop-vstart)/vinc))+1);
 disp('Initiating sweep');
 disp('Start sweep');
 fprintf(k, ':INIT');

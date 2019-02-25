@@ -1,4 +1,5 @@
 function output = smkLinearSweepSample(vstart, vstop, vinc, icc)
+vinc = sign(vstop-vstart)*abs(vinc);
 
 k = smkConnect();
 data=smkLinearSweep(k,vstart, vstop, vinc, icc);

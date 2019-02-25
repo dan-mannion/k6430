@@ -10,6 +10,7 @@ fprintf(k, ':SENSE1:CURRENT:PROTECTION:LEVEL %e',icc);
 %Timing and ranges
 fprintf(k, ':SENSE1:CURRENT:NPLCYCLES 1');
 fprintf(k, ':SENSE1:CURRENT:RANGE:AUTO ON');
+% fprintf(k, ':SENSE1:CURRENT:RANGE:UPPER 1e-5');
 %COnfiguring the filters used in sense1
 fprintf(k, ':SENSE1:AVERAGE:AUTO ON');
 fprintf(k, ':SENSE1:AVERAGE:STATE ON');
